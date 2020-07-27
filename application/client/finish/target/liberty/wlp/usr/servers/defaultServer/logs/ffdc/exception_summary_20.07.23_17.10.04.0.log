@@ -1,0 +1,14 @@
+
+ Index  Count  Time of first Occurrence    Time of last Occurrence     Exception SourceId ProbeId
+------+------+---------------------------+---------------------------+---------------------------
+     0      1   23/07/20 17:10:04:008 BST   23/07/20 17:10:04:008 BST javax.servlet.ServletException com.ibm.ws.webcontainer.servlet.FileServletWrapper.handleRequest 309
+                                                                            - /Users/thomas.jennings@ibm.com/workdir/security/security-openliberty-blockchain/client/guide-security-intro/finish/target/liberty/wlp/usr/servers/defaultServer/logs/ffdc/ffdc_20.07.23_17.10.04.0.log
+     1      2   23/07/20 17:10:04:018 BST   23/07/20 17:10:04:217 BST com.ibm.ws.webcontainer.webapp.WebAppErrorReport com.ibm.ws.webcontainer.filter.WebAppFilterChain.doFilter 82
+                                                                            - /Users/thomas.jennings@ibm.com/workdir/security/security-openliberty-blockchain/client/guide-security-intro/finish/target/liberty/wlp/usr/servers/defaultServer/logs/ffdc/ffdc_20.07.23_17.10.04.1.log
+     2      1   23/07/20 17:10:04:159 BST   23/07/20 17:10:04:159 BST com.ibm.ws.webcontainer.webapp.WebAppErrorReport com.ibm.ws.webcontainer.filter.FilterInstanceWrapper.doFilter 144
+                                                                            - /Users/thomas.jennings@ibm.com/workdir/security/security-openliberty-blockchain/client/guide-security-intro/finish/target/liberty/wlp/usr/servers/defaultServer/logs/ffdc/ffdc_20.07.23_17.10.04.2.log
+     3      1   23/07/20 17:10:04:386 BST   23/07/20 17:10:04:386 BST java.io.IOException com.ibm.ws.webcontainer.webapp.WebApp.handleError 912
+                                                                            - /Users/thomas.jennings@ibm.com/workdir/security/security-openliberty-blockchain/client/guide-security-intro/finish/target/liberty/wlp/usr/servers/defaultServer/logs/ffdc/ffdc_20.07.23_17.10.04.3.log
+     4      1   23/07/20 17:10:04:566 BST   23/07/20 17:10:04:566 BST java.lang.IllegalStateException com.ibm.ws.webcontainer.webapp.WebApp.reportRecursiveError 985
+                                                                            - /Users/thomas.jennings@ibm.com/workdir/security/security-openliberty-blockchain/client/guide-security-intro/finish/target/liberty/wlp/usr/servers/defaultServer/logs/ffdc/ffdc_20.07.23_17.10.04.4.log
+------+------+---------------------------+---------------------------+---------------------------
