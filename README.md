@@ -2,52 +2,52 @@
 Author: Thomas Jennings
 email: thomas.jennings@ibm.com
  -->
-# Listen to blockchain events in Java microservices
+# Secure blockchain transactions with Java microservices  
 
-> 2 Org Hyperledger Fabric sample using Open Liberty to execute transactions and listen to events with IBM Blockchain Platform
+> 1 Org Hyperledger Fabric sample using secure Open Liberty microservices to execute transactions to the blockchain network using MicroProfile JWT and Hyperledger Fabric Attribute-Based Access Control (ABAC).
 
-Use Java microservices to listen for events from a distributed blockchain network using Open Liberty. Submit transactions and listen to events using Hyperledger Java SDK and Open Liberty.
+In this tutorial, use secure Java microservices to execute transactions to a 1 Org blockchain network over HTTPS, using authentication and authorization onto the blockchain network using Json Web Tokens (JWT) and adding identities to the blockchain network, so individual users can interact with blockchain ledger through a secure angular front end UI and back end service, both powered by Open Liberty. 
 
 Learn about the fundamentals of blockchain and Open Liberty by following the [Integrating Java microservices with blockchain using Hyperledger Fabric and Open Liberty](https://developer.ibm.com/tutorials/integrate-java-microservices-with-blockchain-using-hyperledger-fabric-and-open-liberty/) to experience starting a 1 Org blockchain network and using Open Liberty to execute transactions to blockchain. 
 
+Develop blockchain and Open Liberty skills further and learn about distributed blockchain networks with a buyer and seller scenario and [Listen to events from a distributed blockchain network](https://developer.ibm.com/tutorials/listen-to-events-from-a-distributed-blockchain-network/) 
 
-* Use the IBM Blockchain Platform extension to create a distributed 2 Org local blockchain network and deploy a sample smart contract called "fabcar"
-* Use the [Open Liberty](https://openliberty.io) development tools to start the two Java microservices 
-* Transact on the blockchain network from  Org1 Java microservice 
-* Listen for events emitted out of Hyperledger fabric on Org2' Java microservice 
-* Update the owner of a car and view the  event
-* Query cars by car ID and whole ledger state.
 
-Using blockchain provides supply chains a permanent record of transactions which are grouped in blocks that cannot be altered, creating an alternative to traditional paper tracking and manual inspection systems, that can leave supply chains vulnerable to inaccuracies and fraud.
+* Use the IBM Blockchain Platform extension to create a 1 Org local blockchain network and deploy a sample smart contract called "fabcar"
+* Use the [Open Liberty](https://openliberty.io) development tools to start the secure front-end and back-end Java microservices 
+* Authenticate as an admin user to transact to the blockchain network to add query and update cars.
+* Add an identity to the blockchain network
+* Authenticate as an employee, giving access to certain transaction  functionalities on the network such as querying all ledger state and specific cars.
+* Attempt to access front end and backend services to gain access to transact with the blockchain network.
 
-The scenario we are creating is a distributed blockchain network using a seller (Organization 1) and a buyer (Organization 2) in a supply chain for car sales.
-
-The seller will add a car to the blockchain network and the buyer will be notified when a new vehicle has been added to the blockchain through an emitted event.
-
-The buyer can listen to events in two ways: 
-
-1. Querying last event
-2. Listen to events through a web interface that automatically updates with new transaction data.
 
 ## Architecture flow
 
- <img src="images/ArchitectDiagram.png" alt="drawing">
+ <img src="images/security-architect-diagram.png" alt="drawing">
  
-1. The developer develops a smart contract using Java (Preconfigured "fabcar" sample)
+A. The developer develops a smart contract using Java (Preconfigured "fabcar" sample)
  
-2. Use the IBM Blockchain Platform Extension for VS Code to package the Decentralized "fabcar" smart contract.
+B. Use the IBM Blockchain Platform Extension for VS Code to package the  "fabcar" smart contract.
 
-3. Setup and launch the IBM Blockchain Platform 2.0 service
+C. Setup and launch the IBM Blockchain Platform 2.0 service
 
-4. The IBM Blockchain Platform 2.0 enables the creation of a network in Docker containers locally enabling installation and instantiation of the "fabcar" smart contract on the network for 2 organizations
+D. The IBM Blockchain Platform 2.0 enables the creation of a network in Docker containers locally enabling installation and instantiation of the "fabcar" smart contract on the network
 
-5. The seller adds a new car to the ledger using Open Liberty Organization 1.
+1. Organization One sets access rights within their org for their employees to do the functionalities onto the blockchain network assigned by the smart contract from blockchain network. Our example is 'Fab Car'.
 
-6. The Buyer, uses Open Liberty to listen for transactions, subsequently interacting with the deployed network on IBM Blockchain Platform 2.0.
+1a. Jane is authenticated and has access rights of type 'Admin' and 'User' allowing her all functionallity to the blockchain network: Adding, Updating, Querying 
 
-7. The added car on the ledger automatically emits a transaction event and the buyer recieves said transaction.  
+1b. Jerry is also authenticated, however as Jerry is a new employee and only has 'User' rights, he is not allowed to add or update cars on the ledger
 
-8. The buyer can query the last event or recieve automatic updates.  
+1c. Jenna is a hacker has no rights and shouldn't be accessing the blockchain network.  
+
+2. Users of Organization One are authenticated for an application sat in front of the Open Liberty-Blockchain RESTful Webservice. This is achieved using Java EE security. This front end application is authenticated to The back end REST API with JSON Web Tokens (JWT).
+
+The back end is authenticated to the Blockchain network through the MSP and the certificates. 
+
+Within the application the microservices are secured with JSON Web Tokens (JWT) which controls the user access with MicroProfile JWT
+
+3. Organisation 1, the seller, performs functionalities  to the ledger using the Open Liberty RESTful Webservice and the Java Fabric SDK.
 
 ## Prerequisites:
 
@@ -58,27 +58,54 @@ The buyer can listen to events in two ways:
 * VS Code
 * Linux or Mac OS
 
+## What is the difference between Authentication and Authorization?
+
+Authentication is the process of verifying who a user is, while authorization is the process of verifying what they have access to.
+
+In this scenario, Open Liberty is managing the authentication of users and IBM Blockchain platform is managing the authorization to communicate to the blockchain network.
+
+## What is MicroProfile Json Web  Tokens?
+
+A MicroProfile JSON Web Token uses a token-based authentication mechanism to authenticate, authorize, and verify user identities based on a security token. It is a way for security controls and security tokens to propagate user identities across different services. 
+
+In this case, the services are the Angular UI and the backend REST service to transact with the blockchain network.  
+
+<!--
+## What is Hyperledger attribute based access control?
+
+Attribute based access control (ABAC) restricts access for a specific user, allowing a certain user to have only the necessary attributes in their certificate to transact with the blockchain network. 
+
+### Why do you need JWT and ABAC?
+
+JWT security is for securing the Java Microservices and ABAC is for securing blockchain.
+
+If ABAC was not implemented, Open Liberty would use only one certificate, the admin CA. In previous tutorials, we only use the admin CA. 
+-->
 ## Steps
 
 * Import the Open Liberty projects into VS Code.
 
 * Import the FabCar sample smart contract project into VS Code.
 
-* Start a 2 Org blockchain network and deploy the contract to both organizations.
+* Start a 1 Org blockchain network and deploy the contract. 
 
-* Export credentials for Org1 and Org2 to communicate with the blockchain network.
+* Export the admin credential for Org1 Admin user to communicate with the blockchain network.
 
-* Startup Org1 and Org2 microservices.
+* Startup Angular front-end  microservice.
 
-* Add a car to the Ledger from Org1.
+* Startup the back-end microservice.
 
-* Query all Ledger state from Org2.
+* Login as an admin user to execute transactions over HTTPS. 
 
-* View events from Hyperledger Fabric.
+* Add an employee identity to the wallet through the VS Code extension 
 
-* Listen to events through a web interface.
+* Login as an employee to execute transactions over HTTPS.
 
-* Update the owner of a Car on the Ledger from Org2.
+* Login as a user with no access rights to the blockchain network.
+
+* Attempt to login as a user with no authorization.
+
+* Attempt to access the back-end service to transact directly to the blockchain network without the frontend.
 
 * Stop the microservices.
 
@@ -100,15 +127,15 @@ The buyer can listen to events in two ways:
 
 1. Open a terminal window and clone the sample project in GitHub:
 
-    `git clone https://github.com/tomjenningss/eventing-openliberty-blockchain.git`
+    `git clone https://github.com/tomjenningss/security-openliberty-blockchain.git`
 
-1. Add the Org1 project to VS Code, select **File** > **Open** > **eventing/org1**, and then click **Open**.
+To add Org1-Functions project to VS Code, select **File > Open > security-openliberty-blockchain/microservices/org1-microservice/org1-OL-Blockchain-Functions**, and then click Open.
 
-    This will add the Org1 project to the workspace and will automatically add `Liberty Dev Dashboard` into the VS Code extension. Clicking on the `Liberty Dev Dashboard` will display `org1-ol-blockchain`
+This adds the Org1 project to the workspace and automatically adds Liberty Dev Dashboard into the VS Code extension. To display org1-ol-blockchain-functions, you can click Liberty Dev Dashboard.
 
-1. Open a new VS Code window to add the Org2 project: **File** > **New Window**. Import the Org2 project **File** > **Open** > **eventing/org2**, and then click **Open**.
+Select **File > New Window** to open a new VS Code window to add the Client  project.
 
-    Adding the Org2 project is what makes the blockchain network distributed as it will add multiple organizations. Open the `Liberty Dev Dashboard` to view the `org2-ol-blockchain`.
+To import the client project, select **File > Open > security-openliberty-blockchain/application/client/org1-client**, and then click Open.
 
 ## 3. Import the FabCar sample smart contract project into VS Code
 
@@ -138,45 +165,21 @@ The buyer can listen to events in two ways:
 
 1. Click the IBM Blockchain Platform icon on the left side to navigate back to the IBM Blockchain Platform extension for VS Code.
 
-## 4. Start a 2 Org blockchain network and deploy the contract
+## 4. Start a 1 Org blockchain network and deploy the contract
 
-1. Within **FABRIC ENVIRONMENTS**, select the ` + ` icon to create a customized blockchain network.
+1. Under FABRIC ENVIRONMENTS, select 1 Org Local Fabric o (click to start).
 
-1. Select `Create  new from template`, using a template blockchain network structure created by IBM Blockchain platform team.
+    This will start up Docker containers and configure the startup of the blockchain network. The first time will take approximately 3 – 5 minutes, as it pulls down the Docker images, starts up the containers, and configures the blockchain network.
 
-1. As we are creating a **2 Org network** select **2 Org template (2CAs, 2 peers, 1 channel)**
+1. Once you’re connected to the “Local Fabric” environment (this happens automatically after it has started), under Smart Contracts > Instantiated, click +Instantiate.
 
-    <img src="images/2OrgTemplate.png" alt="drawing">
+1. Choose fabcar-contract-java Open Project (at the Command Palette prompt).
 
-1. Name the Environment `2 Org Local Fabric`
+1. When prompted to “Enter a name for your Java Package,” enter fabcar, and press Enter.
 
-    This will take 2 - 5 minutes to start new local environemt. Once successful it will display "Successfully added a new environment".
+1. When prompted to “Enter a version for your Java package,” enter 1.0.0.
 
-1. Click on the `2 Org Local Fabric o` to connect to local fabric runtime. Once you're connected to the "2 Org Local Fabric" environment, under **Smart Contracts** > **Instantiated**, click **+Instantiate**.`
-
-1. Choose **fabcar-contract-java Open Project** (at the Command Palette prompt).
-
-1. When prompted to `Enter a name for your Java Package`, enter `fabcar`, and press **Enter**.
-
-1. When prompted to `Enter a version for your Java package`, enter `2.0.0`.
-
-1. Select all the Peers to install the smart contract onto and press **OK**
-    
-    In a supply chain environment the smart contract is a self-enforcing agreement between parties. If all parties agree who are bound into that smart contract data can be added to the blockchain.
-
-    In our example the buyer and the seller are both agreeing to the terms and conditions of the smart contract. 
-
-  <img src="images/all-peer-installation.png" alt="drawing">
-
-  1. When "Optional functions" appears, enter `initLedger`. This initializes the ledger with unique cars. Not entering the function will result in the blockchain network being empty.
-
-   <img src="images/initLedger-function.png" alt="drawing">
-
-1. For all other "Optional functions", press **Enter** to skip.
-
-1. When asked, `Do you want to provide a private data collection configuration file?`, select `No`, as you do not need any private data configuration files.
-
-The notification window at the bottom left will say, `IBM Blockchain Platform extension: Instantiating Smart Contract`. It will take approximately 2 - 5 minutes to instantiate the smart contract.
+1. When “Optional functions” appears, enter initLedger. This initializes the ledger with cars. Not entering the function will result in the blockchain network being empty.
 
 ## 5. Export credentials to communicate with the blockchain network
 
@@ -184,9 +187,9 @@ For Open Liberty to communicate to the blockchain network, Hyperledger Fabric ha
 
 1. Export the Local Fabric Gateways:
 
-   1. In the "FABRIC GATEWAYS" panel, select `2 Org Local Fabric`.
+   1. In the “FABRIC GATEWAYS” panel, select 1 Org Local Fabric – Org1.
 
-        As there are multiple organizations, we need to connect to both `Org1` and `Org2` as admin to export the connection profiles.  
+        “Choose an identity to connect with” will appear from the command palette. Select admin.
 
    1. Select `Org1` and "Choose an identity to connect with" will appear from the command palette. Select **admin**.
 
@@ -204,35 +207,14 @@ For Open Liberty to communicate to the blockchain network, Hyperledger Fabric ha
 
       The full path directory should be `Users/Shared/FabConnection`.
 
-   1. Save the `.json` file as `2-Org-Local-Fabric-Org1_connection.json`.
+   1. Save the `.json` file as `1-Org-Local-Fabric-Org1_connection.json`.
 
    1. To disconnect from Org1 Fabric gateway press the "door" icon. 
    
     <img src="images/exit-door.png" alt="drawing">
-   
-   9. Select `Org2` and "Choose an identity to connect with" will appear from the command palette. Select **admin**.
+ 
 
-   10. Hover over the **FABRIC GATEWAYS** heading, click **...** > **Export connection profile**.
-
-   1. The `finder` window will open.
-
-   1. Navigate to `Users/Shared/FabConnection`.
-
-   1.  Save the `.json` file as `2-Org-Local-Fabric-Org2_connection.json`.
-
-1. Export the Fabric Wallets:
-
-   1. In the "FABRIC WALLETS" panel, select **2 Org Local Fabric**, then right-click **Org1**, and select **Export Wallet**.
-
-      <img src="images/export-org1.png" alt="drawing">
-
-   1. Save the folder as `org-1-wallet` in the `/Users/Shared/FabConnection/` directory.
-
-   1. Export **Org2** wallet. Select **Org2**,  right click and **Export Wallet**.
-
-   1. Save the folder as `org-2-wallet` in the `/Users/Shared/FabConnection/` directory. 
-
-## 6. Start Org 1 and Org 2 Microservices
+## 6. Start Client App and Org 1 Microservice
 
 1. You will have two VS Code widows open. As we installed the Dev Tool for Open Liberty, click the Liberty Dev Dashboard icon, and the extension will display the project: `org-1-ol-blockchain`.
 
@@ -240,154 +222,89 @@ For Open Liberty to communicate to the blockchain network, Hyperledger Fabric ha
 
     This will quickly start up the microservice within 2 – 5 seconds.
 
-    Org1 is now running on port 9080.
+    Org1 is now running on port 9445.
 
-1. Navigate to the other VS Code window, click the Liberty Dev Dashboard icon, and the extension will display the project: `org-2-ol-blockchain`.
+1. Navigate to the other VS Code window, click the Liberty Dev Dashboard icon, and the extension will display the project: `org-1-ol-client`.
 
-    Right-click org2-ol-blockchain, and select Start.
+    Right-click org1-ol-client, and select Start.
 
-    Org2 is now running on port 9081.
+    client is now running on port 9445.
 
-## 7. Add a car to the ledger
+## 7. Login as Admin 
 
-As there are two organizations, we are going to test submitting a transaction from the seller and view the updated Ledger as the buyer.
+Open up the web browser of choice. (Safari is the easiest to accept the SSL)
 
-1. Navigate to the seller's Java microservice on port 9080: http://localhost:9080/openapi/ui/
+Navigate to `https://localhost:9443/home/`
 
-1. Navigate to **POST /System/Resources/Car Add a car to the ledger**.
+The browser will give you a certificate warning, this is because the Open Liberty server created a self-signed (SSL) certificate by default. 
 
-1. Click **Try it out**.
+Follow your browser’s provided instructions to accept the certificate and continue. 
 
-1. Fill in the example schema with the following values, as illustrated in the figure:
+<img src="images/access-https.png" alt="drawing">
 
-   ```
-   {
-     "make": "VW",
-     "model": "Golf",
-     "colour": "White",
-     "owner": "Tom Jennings",
-     "key": "CAR20"
-   }
-   ```
+First, click 'show details' and a text box below 'This Connection Is Not Private' will appear. Select 'visit this website' link and When prompted click: 'Visit Website'. This will prompt you for a password; enter the login password that you use when first starting up the machine.
 
-## 8. Query all ledger state as a buyer
+Notice the 'padlock' and 'https' is the URL bar.
 
-A buyer may be interested in purchasing a used car and will query all cars on the blockchain.
+The login page will appear. Login as 'Bob' who is an admin user.
 
-1. Navigate to the buyer's Java microservice on port 9081: http://localhost:9081/openapi/ui/
+Username: `bob`
 
-1. Navigate to **GET /System/Resources/Cars Returns all cars > Try it out > Execute.**
+Password: `bobpwd`
+
+Click the `login` button
+
+This will take you to the main landing page where company employees can interact with the blockchain network. 
+
+## 8. Add a car to the ledger
+
+The admin user may be interested in adding a car to the ledger. This may happen if a new list of cars has arrived into the garage.
+
+<img src="images/addcar.png" alt="drawing">
+
+Fill in the UI with the following example
+
+`Audi`
+
+`TT`
+
+`White`
+
+`Kate`
+
+`CAR20`
+
+Press submit details to make a secure transaction to the blockchain network
+
+Navigate back to the landing page by clicking the 'Home' button in the bottom left hand corner and logout by clicking the 'logout' button at the top right of the page.
+ 
+## 9. Query all ledger state as a regular employee
+
+An employee may be interested in querying all the cars to see what is on the ledger so far.
+
+Select `Query all cars > ` button. As no user interaction is needed, the cars from the blockchain ledger will automatically appear.
 
 This will send a request to the Ledger and return all the cars. A successful response should look like:
 
 ```
-Queried all Cars Successfully.
-Cars:
-[{"make":"VW","model":"Golf","colour":"White","owner":"Tom"}}]
+Query All Cars on the network:
+Owner:	Color:	Model:	Make:
+Tomoko	blue	Prius	Toyota
+Brad	red	Mustang	Ford
+Jin Soo	green	Tucson	Hyundai
+Max	yellow	Passat	Volkswagen
+Adrian	black	S	Tesla
+Michel	purple	205	Peugeot
+Aarav	white	S22L	Chery
+Pari	violet	Punto	Fiat
+Valeria	indigo	nano	Tata
+Shotaro	brown	Barina	Holden
 ```
+From clicking the `Query all cars` button, a request is  made to the backend rest-server, securely over HTTPS. From there the server contacts the blockchain network to retrieve all the cars, return it to the back-end server and the back end sends it to the client user interface. 
 
-## 9. Events out of Hyperledger Fabric
+If you tried to add a car it will not allow you as the JWT authorization is specifying that the only users that are allowed to add cars to the ledger are 'admin' users.
 
-The diagram illustrates how Open Liberty is listening to events from Hyperledger Fabric locally. 
-
- <img src="images/events-diagram.png" alt="drawing">
-
-1. The seller submits a transaction and the Java microservice processes the car and adds it to the blockchain network. <br><br>A. The vehicle can be queried by any organization, as demonstrated in step 7.
-
-2. When the buyer or seller submits a transaction to the Ledger, an event is emitted from Hyperledger Fabric. Organization One does not have the configuration to listen for the said event as the seller is not interested in being notified of the event.
-
-3. Organization two has the configuration to listen to the events, resulting in the organization receiving the event triggered by Org1.
-
-4. This is an event-driven architecture between organization one and organization two. Organization two automatically receives events emitted out of Hyperledger Fabric and displays these through a servlet (5).
-
-### Submit a new transaction
-
-1. Navigate to the seller's Java microservice on port 9080: http://localhost:9080/openapi/ui
-
-1. Navigate to **POST /System/Resources/Car Add a car to the ledger**.
-
-    Fill in the example Schema
-
-    ```
-    {
-     "make": "Audi",
-     "model": "A6",
-     "colour": "Black",
-     "owner": "David J",
-      "key": "CAR21"
-    }
-    ```
-
-2. Org2 automatically receives the Event data from listening for the Event.
-
-3.  Navigate to the buyers' Java microservice on port 9081: http://localhost:9081/openapi/ui 
-
-
-4. Navigate to **GET /System/Resources/TransactionId Returns transactionId data**.
-
-    View the contents of the Event that has been collected as part of 2.  
-
-    ![](images/gifs/viewtransactiondata.gif)
-
-    Fill out the example schema with your own cars and see the recent event of your own cars.
- 
-1. Navigate to **GET /System/Resources/Events Returns events**.
-
-    ![](images/gifs/transactionid.gif)
-
-    Every transaction submitted to Hyperledger Fabric has a unique transaction id. When pressing execute, it returns the unique transactionid data.
-
-
-### Listen to Events automatically from Hyperledger Fabric
-
-Open another tab on the web browser of your choice and experience the event-based driven architecture of listening to events 
-
-1. Navigate to http://localhost:9081/org-2-ol-blockchain/servlet
-
-    The Servlet on Org2 listening to events automatically out of Hyperledger Fabric. This is done through a [servlet.](https://openliberty.io/guides/maven-intro.html#creating-the-project-pom-file)  
-
-    ![](images/gifs/transaction-event.gif)
-
-1. Navigate to Org1 and add a car to the ledger **Post /System/Resources/Car Add a car to the ledger.**
-
-1. Click **Try it out.**
-
-1. Fill in the example schema with the following values, as illustrated in the figure:
-
-```
-{
-  "make": "Ford",
-  "model": "Fiesta",
-  "colour": "Blue",
-  "owner": "Hannah J",
-  "key": "CAR22"
-}
-```
-
-The event appears successfully on the buyers window, showing the latest transaction that has been added to the ledger.
-
-Try it out by adding more cars to the ledger and viewing the events out of Hyperledger fabric. 
-
-## 10. Update the owner of the car
-
-The buyer on Organization 2 may decide they want to buy the car from the seller. 
-
-1. Navigate to Org2 to update the owner of a car **PUT /System/Resources/Car Update the owner of a car in the ledger**
-
-1. Click **Try it out**
-
-1. Fill in the example Schema:
-
-```
-{
-  "make": "string",
-  "model": "string",
-  "colour": "string",
-  "owner": "Yasmin A",
-  "key": "CAR23"
-}
-```
-
+<!--
 ## 11. Query a specific car on the ledger
 
 As the blockchain is distributed you can query the specific car from any organization. However as the buyer has agreed to buy the car query it from Org2:
@@ -410,23 +327,30 @@ The successful response should look like:
    Key = CAR23
    Details = {"make":"Ford","model":"Fiesta","colour":"Blue","owner":"Yasmin A"}
 ```
+-->
+
 
 ## 12. Stop the Open Liberty microservices
 
+<!--
 Once you have finished, for both organsiations go to VS Code > Liberty Dev Dashboard, and press **Stop**. This will stop the Open Liberty server. 
 
 Now, the servers is off and the application is not running anymore. If you tried to hit one of the endpoints, it would not find it.
+-->
 
 ## 13. Tear down the blockchain network
 
+<!--
 *Optional*: You can stop the blockchain network, and save the state on the ledger if you decide to come back to it later. Click on the IBM Blockchain Platform icon on the left side. On Fabric Environments, click **...** > **Stop Fabric Environment**. 
 
 1. You can easily start it again by clicking `2 Org Local Fabric`. 
 
 To remove the Docker images where it is running, on Fabric Environments click **...** > **Teardown Fabric Environment**.
 
+-->
+
 ## Conclusion
 
+<!--
 Well done. You have created a 2 Org network, where different organizations submit transactions to the blockchain: adding, updating and querying as well as listening to events from a blockchain using the Hyperledger Java SDK and Open Liberty.
-
-
+-->
