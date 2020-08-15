@@ -11,9 +11,13 @@
   <!-- end::featureManager[] -->
 	
   <variable name="default.http.port" defaultValue="9080"/>
-  <variable name="default.https.port" defaultValue="9443"/>
+  <variable name="default.https.port" defaultValue="9445"/>
   <variable name="app.context.root" defaultValue="ol-blockchain"/>
   
+  <httpEndpoint httpPort="-1" httpsPort="${default.https.port}"
+                id="defaultHttpEndpoint" host="*" />
+                
+                
   <!-- tag::httpEndpoint[] -->
   <!--  <httpEndpoint httpPort="${default.http.port}" httpsPort="${default.https.port}"
                 id="defaultHttpEndpoint" host="*" /> -->
@@ -26,4 +30,17 @@
   <!-- <webApplication location="org-1-ol-blockchain.war" contextRoot="${app.context.root}"/> -->
   <webApplication location="org-1-ol-blockchain.war" contextRoot="${app.context.root}"/>
   <!-- end::webApplication[] -->
+  
+  <cors domain="${app.context.root}"
+    allowedOrigins="*"
+    allowedMethods="GET"/>
+    
+     <cors domain="${app.context.root}"
+    allowedOrigins="*"
+    allowedMethods="PUT"/>
+    
+     <cors domain="${app.context.root}"
+    allowedOrigins="*"
+    allowedMethods="POST"/>
+    
 </server>

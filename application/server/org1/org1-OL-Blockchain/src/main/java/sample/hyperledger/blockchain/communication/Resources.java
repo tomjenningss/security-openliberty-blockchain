@@ -191,7 +191,7 @@ public class Resources {
 				Contract contract = network.getContract("fabcar");
 				result = contract.evaluateTransaction("queryCar", Key);
 				outputString = new String(result);
-				passedOutput = "Queried car Successfully. \nKey = " + Key + "\nDetails = " + outputString;
+				passedOutput = outputString;
 				return passedOutput;
 			}
 			catch (Exception e){
@@ -250,7 +250,7 @@ public class Resources {
 				Contract contract = network.getContract("fabcar");
 				result = contract.evaluateTransaction("queryAllCars");
 				outputString = new String(result);
-				passedOutput = "Queried all Cars Successfully. \nCars are:\n " + outputString;	
+				passedOutput = outputString;	
 				return passedOutput;
 			}
 			catch (Exception e){
