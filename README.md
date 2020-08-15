@@ -6,20 +6,18 @@ email: thomas.jennings@ibm.com
 
 > 1 Org Hyperledger Fabric sample using secure Open Liberty microservices to execute transactions to the blockchain network using MicroProfile JWT and Hyperledger Fabric Attribute-Based Access Control (ABAC).
 
-In this tutorial, use secure Java microservices to execute transactions to a 1 Org blockchain network over HTTPS, using authentication and authorization onto the blockchain network using Json Web Tokens (JWT) and adding identities to the blockchain network, so individual users can interact with blockchain ledger through a secure angular front end UI and back end service, both powered by Open Liberty. 
+In this tutorial, register and enrol new users onto the blockchain network through the VS Code extension and use secure Java microservices to execute transactions to a 1 Org blockchain network over HTTPS, using Java EE security for authentication and Json Web Tokens (JWT) for authorizing transactions.
 
-Learn about the fundamentals of blockchain and Open Liberty by following the [Integrating Java microservices with blockchain using Hyperledger Fabric and Open Liberty](https://developer.ibm.com/tutorials/integrate-java-microservices-with-blockchain-using-hyperledger-fabric-and-open-liberty/) to experience starting a 1 Org blockchain network and using Open Liberty to execute transactions to blockchain. 
+Follow the series and learn about the fundamentals of blockchain and Open Liberty by following the [Integrating Java microservices with blockchain using Hyperledger Fabric and Open Liberty](https://developer.ibm.com/tutorials/integrate-java-microservices-with-blockchain-using-hyperledger-fabric-and-open-liberty/) to experience starting a 1 Org blockchain network and using Open Liberty to execute transactions to blockchain. 
 
-Develop blockchain and Open Liberty skills further and learn about distributed blockchain networks with a buyer and seller scenario and [Listen to events from a distributed blockchain network](https://developer.ibm.com/tutorials/listen-to-events-from-a-distributed-blockchain-network/) 
+Develop blockchain and Open Liberty skills further and learn about distributed blockchain networks with a buyer and seller scenario and [Listen to events from a distributed blockchain network](https://developer.ibm.com/tutorials/listen-to-events-from-a-distributed-blockchain-network/) to automatically get notified of new events out of blockchain when a seller adds cars to the blockchain network.
 
 
 * Use the IBM Blockchain Platform extension to create a 1 Org local blockchain network and deploy a sample smart contract called "fabcar"
 * Use the [Open Liberty](https://openliberty.io) development tools to start the secure front-end and back-end Java microservices 
 * Authenticate as an admin user to transact to the blockchain network to add query and update cars.
-* Add an identity to the blockchain network
 * Authenticate as an employee, giving access to certain transaction  functionalities on the network such as querying all ledger state and specific cars.
 * Attempt to access front end and backend services to gain access to transact with the blockchain network.
-
 
 ## Architecture flow
 
@@ -70,11 +68,12 @@ A MicroProfile JSON Web Token uses a token-based authentication mechanism to aut
 
 In this case, the services are the Angular UI and the backend REST service to transact with the blockchain network.  
 
-<!--
+
 ## What is Hyperledger attribute based access control?
 
-Attribute based access control (ABAC) restricts access for a specific user, allowing a certain user to have only the necessary attributes in their certificate to transact with the blockchain network. 
+Attribute based access control (ABAC) restricts access for a specific user at the chain code level, allowing a certain user to have only the necessary attributes in their certificate to transact with the blockchain network. 
 
+<!--
 ### Why do you need JWT and ABAC?
 
 JWT security is for securing the Java Microservices and ABAC is for securing blockchain.
@@ -89,21 +88,21 @@ If ABAC was not implemented, Open Liberty would use only one certificate, the ad
 
 * Start a 1 Org blockchain network and deploy the contract. 
 
-* Export the admin credential for Org1 Admin user to communicate with the blockchain network.
+* Add an employee identity to the wallet by registering and enrolling the users through the VS Code extension 
 
-* Startup Angular front-end  microservice.
+* Export the org 1 wallet with the certificate authorities for the registered and enrolled users for Org1 to communicate with the blockchain network.
+
+* Startup Angular front-end microservice.
 
 * Startup the back-end microservice.
 
 * Login as an admin user to execute transactions over HTTPS. 
 
-* Add an employee identity to the wallet through the VS Code extension 
-
 * Login as an employee to execute transactions over HTTPS.
 
 * Login as a user with no access rights to the blockchain network.
 
-* Attempt to login as a user with no authorization.
+* Attempt to login as someone with no authorization.
 
 * Attempt to access the back-end service to transact directly to the blockchain network without the frontend.
 
@@ -180,6 +179,14 @@ To import the client project, select **File > Open > security-openliberty-blockc
 1. When prompted to “Enter a version for your Java package,” enter 1.0.0.
 
 1. When “Optional functions” appears, enter initLedger. This initializes the ledger with cars. Not entering the function will result in the blockchain network being empty.
+
+## 5. Add user identities to the Org1 wallet
+
+1. In the “FABRIC GATEWAYS” panel select **1 Org Local Fabric – Org1** > **Nodes**
+
+1. Navigate to **Org1CA** > right click > **Create Identity (register and enroll a user)**
+
+---here
 
 ## 5. Export credentials to communicate with the blockchain network
 
