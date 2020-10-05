@@ -19,25 +19,17 @@
         <version.maven-failsafe-plugin>2.22.2</version.maven-failsafe-plugin>
         <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
         <version.maven-war-plugin>3.2.3</version.maven-war-plugin>
-        <!-- Liberty configuration -->
-        <!-- tag::defaultHttpPort[] -->
-        
-        <!-- end::defaultHttpPort[] -->
-        <!-- tag::defaultHttpsPort[] -->
+       
+        <!-- <liberty.var.default.http.port>9080</liberty.var.default.http.port>  -->
         <liberty.var.default.https.port>9445</liberty.var.default.https.port>
-        <!-- end::defaultHttpsPort[] -->
-        <!-- tag::appContextRoot[] -->
         <liberty.var.app.context.root>${project.artifactId}</liberty.var.app.context.root>
-        <!-- end::appContextRoot[] -->
+
     </properties>
 
     <dependencies>
-        <!-- Provided dependencies -->
         <dependency>
 		      <groupId>org.eclipse.microprofile</groupId>
-		      <!-- tag::microprofile[] -->
 		      <artifactId>microprofile</artifactId>
-		      <!-- end::microprofile[] -->
       		<version>3.2</version>
       		<type>pom</type>
       		<scope>provided</scope>
@@ -48,7 +40,6 @@
             <version>8.0.0</version>
             <scope>provided</scope>
         </dependency>
-        <!-- For tests -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -73,7 +64,6 @@
             <version>1.0.5</version>
             <scope>test</scope>
         </dependency>
-        <!-- Support for JDK 9 and above -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
@@ -111,33 +101,29 @@
 
     <build>
         <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <!-- Enable liberty-maven plugin -->
+        <plugins>  
             <plugin>
                 <groupId>io.openliberty.tools</groupId>
                 <artifactId>liberty-maven-plugin</artifactId>
                 <version>${version.liberty-maven-plugin}</version>
             </plugin>
-            <!-- Plugin to run functional tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${version.maven-failsafe-plugin}</version>
-                <configuration>
-                    <!-- tag::testsysprops[] -->
+                <configuration> 
                     <systemPropertyVariables>
                         <http.port>${liberty.var.default.http.port}</http.port>
+                        <https.port>${liberty.var.default.https.port}</https.port>
                         <context.root>${liberty.var.app.context.root}</context.root>
-                    </systemPropertyVariables>
-                    <!-- end::testsysprops[] -->
+                    </systemPropertyVariables>    
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>${version.maven-war-plugin}</version>
+                <version>${version.liberty-maven-plugin}</version>
             </plugin>
-            <!-- Plugin to run unit tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
